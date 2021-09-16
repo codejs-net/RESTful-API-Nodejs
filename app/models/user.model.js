@@ -4,11 +4,9 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
       {
         // Attributes
         id: {
-          type: DataTypes.INTEGER,
-          allowNull:false,
-          uniqur:true,
-          primaryKey:true,
-          autoIncremant:true
+          type: Sequelize.INTEGER,
+          autoIncrement: true,
+          primaryKey: true
         },
         username: {
           type: DataTypes.STRING,
