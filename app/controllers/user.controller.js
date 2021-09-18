@@ -47,7 +47,6 @@ exports.getAll = async (req, res) => {
                 status:true,
                 data:data
             })
-
         })
         .catch(err => {
             res.status(500).send({
@@ -60,7 +59,13 @@ exports.getOne = async (req, res) => {
     const id = req.params.id;
     await User.findByPk(id)
         .then(data => {
-            res.send(data);
+            if (data != null) {
+                res.send(data);
+            } else {
+                res.send({
+                    message: `Cannot find User with id=${id}`
+                });
+            }  
         })
         .catch(err => {
             res.status(500).send(
@@ -72,29 +77,58 @@ exports.getOne = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    // const id = req.params.id;
+    const id = req.params.id;
+    const password = req.body.password;
+    const encryptedPassword = await bcrypt.hash(password, saltRounds)
 
-    // await User.update(req.body, {
-    //     where: { id: id }
-    // })
-    //     .then(num => {
-    //         if (num == 1) {
-    //             res.send({
-    //                 message: "User was updated successfully."
-    //             });
-    //         } else {
-    //             res.send({
-    //                 message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
-    //             });
-    //         }
-    //     })
-    //     .catch(err => {
-    //         res.status(500).send({
-    //             message: "Error updating User with id=" + id
-    //         });
-    //     });
+    const user = {
+        username: req.body.username,
+        status: req.body.status,
+        password: encryptedPassword
+    }
+
+    await User.update(user, {
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "User was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating User with id=" + id
+            });
+        });
 }
 
-exports.delete=async(req,res)=>{
+exports.destroy=async(req,res)=>{
 
+    const id = req.params.id;
+
+    await User.destroy({
+      where: { id: id }
+    })
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: "User was deleted successfully!"
+          });
+        } else {
+          res.send({
+            message: `User was not found! with id=${id}.`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Could not delete User with id=" + id
+        });
+      });
 }

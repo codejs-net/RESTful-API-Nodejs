@@ -14,8 +14,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieparser());
 
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and sync db.");
+// db.sequelize.sync({ force: false }).then(() => {
+   
+// });
+db.sequelize.sync().then(() => {
+  console.log("Server Start");
 });
 
 // ---route----
