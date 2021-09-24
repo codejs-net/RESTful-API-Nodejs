@@ -9,23 +9,25 @@ const port = process.env.PORT || 3003;
 const app = express();
 
 const userRouts = require('./app/routes/user.route');
+const authRouts = require('./app/routes/auth.route');
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieparser());
 
-// db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
    
-// });
-db.sequelize.sync().then(() => {
-  console.log("Server Start");
 });
+// db.sequelize.sync().then(() => {
+//   console.log("Server Start");
+// });
 
 // ---route----
 app.get("/", (req, res) => {
     res.json({ message: "Code-js webApi." });
 });
 app.use('/user', userRouts);
+app.use('/auth', authRouts);
 
 // -------------
 
