@@ -5,11 +5,13 @@ const cookieparser =require("cookie-parser");
 const swaggerUi = require("swagger-ui-express"),
 swaggerDocument = require("./docs/swagger.json");
 const db = require("./app/models/index")
+const { veryfyToken } = require("./app/middlewares/auth.middleware");
 const port = process.env.PORT || 3003;
 const app = express();
 
 const userRouts = require('./app/routes/user.route');
 const authRouts = require('./app/routes/auth.route');
+const roleRouts = require('./app/routes/role.route');
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +30,7 @@ app.get("/", (req, res) => {
 });
 app.use('/user', userRouts);
 app.use('/auth', authRouts);
+app.use('/role', veryfyToken,roleRouts);
 
 // -------------
 

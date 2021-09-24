@@ -18,7 +18,7 @@ module.exports = (sequelize, Sequelize, DataTypes) => {
           type: DataTypes.STRING,
           allowNull:false
         },
-        ststus: {
+        status: {
           type: DataTypes.STRING
         }
       },
